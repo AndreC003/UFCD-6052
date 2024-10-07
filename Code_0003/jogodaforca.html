@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Forca</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #game-container {
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        #forca {
+            font-size: 18px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        #palavra-oculta {
+            font-size: 32px;
+            letter-spacing: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        #letras-erradas {
+            color: #e74c3c;
+            font-size: 16px;
+        }
+
+        input[type="text"] {
+            font-size: 18px;
+            padding: 10px;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 200px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #3498db;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #fff;
+            background-color: #3498db;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+        }
+
+        #result-message {
+            font-size: 20px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        #result-message.success {
+            color: #2ecc71;
+        }
+
+        #result-message.fail {
+            color: #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            #game-container {
+                width: 100%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <h1>Jogo da Forca</h1>
+
+    <div id="forca">
+        <!-- Forca desenhada aqui -->
+    </div>
+
+    <div>
+        <p id="palavra-oculta">_ _ _ _ _</p>
+        <p>Letras erradas: <span id="letras-erradas"></span></p>
+    </div>
+
+    <input type="text" id="letra-input" maxlength="1" placeholder="Digite uma letra" />
+    <button onclick="adivinharLetra()">Adivinhar</button>
+
+    <p id="result-message"></p>
+</div>
+
+<script>
+    const MAX_TENTATIVAS = 5;
+    const palavrasAnimais = ["cachorro", "gato", "elefante", "tigre", "leao"];
+    const palavrasFilmes = ["matrix", "titanic", "avatar", "rocky", "jumanji"];
+    const palavrasObjetos = ["mesa", "cadeira", "computador", "telefone", "laptop"];
+
+    let tentativas = MAX_TENTATIVAS;
+    let palavra = '';
+    let palavraOculta = [];
+    let letrasErradas = [];
+    let letrasUsadas = [];
+
+    // Função para desenhar a forca com base nas tentativas restantes
+    function mostrarForca(tentativas) {
+        let forcaDesenho = `
+            +---+<br>
+            |   |<br>
+            ${tentativas <= 4 ? "O" : "&nbsp;"}   |<br>
+            ${tentativas <= 3 ? "/" : "&nbsp;"}${tentativas <= 2 ? "|" : "&nbsp;"}${tentativas <= 3 ? "\\" : "&nbsp;"}  |<br>
+            ${tentativas <= 2 ? "|" : "&nbsp;"}   |<br>
+            ${tentativas <= 1 ? "/" : "&nbsp;"} ${tentativas <= 0 ? "\\" : "&nbsp;"}  |<br>
+                |<br>
+            =========
+        `;
+        document.getElementById("forca").innerHTML = forcaDesenho;
+    }
+
+    // Função para escolher uma palavra aleatória de um grupo
+    function escolherPalavra(grupo) {
+        const randomIndex = Math.floor(Math.random() * 5);
+        switch (grupo) {
+            case 'a': // Animais
+                return palavrasAnimais[randomIndex];
+            case 'b': // Filmes
+                return palavrasFilmes[randomIndex];
+            case 'c': // Objetos
+                return palavrasObjetos[randomIndex];
+            default:
+                return 'erro';
+        }
+    }
+
+    // Função para iniciar o jogo com base no grupo escolhido
+    function iniciarJogo(grupo) {
+        tentativas = MAX_TENTATIVAS;
+        letrasErradas = [];
+        letrasUsadas = [];
+        palavra = escolherPalavra(grupo);
+        palavraOculta = Array(palavra.length).fill('_');
+        document.getElementById("palavra-oculta").textContent = palavraOculta.join(' ');
+        document.getElementById("letras-erradas").textContent = '';
+        document.getElementById("result-message").textContent = '';
+        mostrarForca(tentativas);
+    }
+
+    // Função para verificar se a letra já foi escolhida
+    function letraJaEscolhida(letra) {
+        return letrasUsadas.includes(letra);
+    }
+
+    // Função para adivinhar uma letra
+    function adivinharLetra() {
+        const letraInput = document.getElementById("letra-input");
+        const letra = letraInput.value.toLowerCase();
+
+        if (!letra || letraJaEscolhida(letra)) {
+            alert("Letra inválida ou já escolhida!");
+            letraInput.value = '';
+            return;
+        }
+
+        letrasUsadas.push(letra);
+        let acertouLetra = false;
+
+        for (let i = 0; i < palavra.length; i++) {
+            if (palavra[i] === letra) {
+                palavraOculta[i] = letra;
+                acertouLetra = true;
+            }
+        }
+
+        if (!acertouLetra) {
+            letrasErradas.push(letra);
+            tentativas--;
+        }
+
+        letraInput.value = '';
+        atualizarJogo();
+    }
+
+    // Função para atualizar a exibição do jogo após cada tentativa
+    function atualizarJogo() {
+        document.getElementById("palavra-oculta").textContent = palavraOculta.join(' ');
+        document.getElementById("letras-erradas").textContent = letrasErradas.join(', ');
+        mostrarForca(tentativas);
+
+        if (palavraOculta.join('') === palavra) {
+            document.getElementById("result-message").textContent = "Parabéns! Você acertou a palavra!";
+            document.getElementById("result-message").classList.add("success");
+            setTimeout(() => iniciarJogo('a'), 2000);
+        } else if (tentativas === 0) {
+            document.getElementById("result-message").textContent = "Você perdeu! A palavra era: " + palavra;
+            document.getElementById("result-message").classList.add("fail");
+            setTimeout(() => iniciarJogo('a'), 2000);
+        }
+    }
+
+    // Iniciar o jogo com o grupo de animais (por exemplo)
+    iniciarJogo('a');
+</script>
+
+</body>
+</html>

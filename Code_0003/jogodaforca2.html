@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Forca</title>
+    <link rel="stylesheet" href="jogodaforca2.css">
+    <script src="jogodaforca2.js"></script>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Jogo da Forca</h1>
+        
+        <div id="forca" class="forca-container">
+            <div class="gallows">
+                <div class="horizontal"></div>
+                <div class="vertical"></div>
+                <div class="noose"></div>
+                <div class="head" style="display: none;"></div>
+                <div class="body" style="display: none;"></div>
+                <div class="arm-left" style="display: none;"></div>
+                <div class="arm-right" style="display: none;"></div>
+                <div class="leg-left" style="display: none;"></div>
+                <div class="leg-right" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div>
+            <p id="palavra-oculta">_ _ _ _ _</p>
+            <p>Letras erradas: <span id="letras-erradas"></span></p>
+        </div>
+
+        <input type="text" id="letra-input" maxlength="1" placeholder="Digite uma letra" />
+        <button id="guess-button">Adivinhar</button>
+
+        <p id="result-message"></p>
+        <button id="restart-button" style="display: none;">Recomeçar</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
