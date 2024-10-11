@@ -1,0 +1,58 @@
+/* Estilos básicos da página */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #e0e0e0;
+}
+
+.container {
+    text-align: center;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+button {
+    padding: 12px 24px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    margin: 10px;
+    transition: background-color 0.3s; /* Efeito de transição */
+}
+
+button.start {
+    background-color: #28a745; /* Verde para iniciar */
+}
+
+button.start:hover {
+    background-color: #218838; /* Verde escuro ao passar o mouse */
+}
+
+button.stop {
+    background-color: #dc3545; /* Vermelho para parar */
+}
+
+button.stop:hover {
+    background-color: #c82333; /* Vermelho escuro ao passar o mouse */
+}
+
+button#resetButton {
+    background-color: #ffc107; /* Amarelo para reiniciar */
+}
+
+button#resetButton:hover {
+    background-color: #e0a800; /* Amarelo escuro ao passar o mouse */
+}
