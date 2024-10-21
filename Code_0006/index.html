@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motor</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Motor</h1>
+        
+        <!-- Controles de direção e velocidade -->
+        <div class="controls">
+            <button id="esquerda" class="botao">Esquerda</button>
+            <button id="stop" class="botao">Stop</button>
+            <button id="direita" class="botao">Direita</button>
+        </div>
+
+        <div class="barra-container">
+            <label for="velocidade">Velocidade do Motor:</label>
+            <input type="range" id="velocidade" min="0" max="100" value="50">
+            <span id="valor-velocidade">50</span>
+        </div>
+
+        <!-- Representação visual do motor -->
+        <div class="motor-container">
+            <div class="motor">
+                <div class="veio" id="veio"></div>
+                <div class="eixo"></div>
+            </div>
+        </div>
+
+        <p id="status-motor">Status: Parado</p>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>
